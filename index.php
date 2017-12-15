@@ -6,46 +6,37 @@
 -->
 
 <?php
-
 if (isset($_GET["requisitarcodigo"])){
-//$result=shell_exec("sudo yowsup-cli registration -E android --requestcode sms --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ."");
-
-$fp = fopen("./requestcod.log", "r");
-$resultado = "";
-while (!feof($fp)){
-$resultado .= fgets($fp);
-}
-fclose($fp);
-$resultado = explode('"',$resultado);
-
-//$resultado = "LOGIN: ".$resultado[3]."	STATUS: ".$resultado[7]."	MOTIVO:" .$resultado[11]."";
-//exec("echo ".$resultado." > /var/www/html/zappin/requestcod.txt");
-/*
-echo("<script language='JavaScript'>
-  var width = 900;
-  var height = 200;
-
-  var left = 99;
-  var top = 99;
-  janela = window.open('requestcod.txt','status', 'width='+width+', height='+height+', scrollbars=yes, status=no, toolbar=no, location=no, directories=no, menubar=no, resizable=no, fullscreen=no');
-</script>
-");*/
-
-echo("<script language='JavaScript''>
-var L='{$resultado[3]}';
-var S='{$resultado[7]}';
-var M='{$resultado[11]}';
-window.alert('Login:  '+L+'    Status: '+S+'    Motivo: '+M+'');
-</script>");
+    $result=shell_exec("sudo yowsup-cli registration -E android --requestcode voice --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ."");
+    $resultado = shell_exec("sudo tail -n1 /var/log/apache2/error.log");
+    
+    $resultado = str_replace("\"", " ",$resultado);
+    $remover_car = array("{","}","\\n");
+    $resultado = str_replace($remover_car," ", $resultado);
+    $resultado = trim($resultado);
+    
+    echo("
+    <script language=\"JavaScript\">
+    var R=\"$resultado\";
+    window.alert(R);
+    </script>");
 }
 ?>
 
 <?php
 if (isset($_GET["registrar"])){
-//$result=shell_exec("sudo yowsup-cli registration -E android --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ." --register " .$_GET["codigo_whats"] ." | tail -n 10");
-//$arquivo="`date +%d%m%Y%H%M`.log";
-//exec("echo >> registrar-".$arquivo."\.log");
-$result=" " .$_GET["telefone"] ." --cc " .$_GET["cc"] ." --register " .$_GET["codigo_whats"] ."";
+    $result=shell_exec("sudo yowsup-cli registration -E android --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ." --register " .$_GET["codigo_whats"] ." | tail -n 10");
+    $resultado = shell_exec("sudo tail -n1 /var/log/apache2/error.log");
+    $resultado = str_replace("\"", " ",$resultado);
+    $remover_car = array("{","}","\\n");
+    $resultado = str_replace($remover_car," ", $resultado);
+    $resultado = trim($resultado);
+    
+    echo("
+    <script language=\"JavaScript\">
+    var R=\"$resultado\";
+    window.alert('Anotar Login e PW: '+R);
+    </script>");
 }
 ?>
 
