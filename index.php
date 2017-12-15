@@ -10,26 +10,22 @@
 if (isset($_GET["requisitarcodigo"])){
 //$result=shell_exec("sudo yowsup-cli registration -E android --requestcode voice --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ."");
 
-//$arquivo="`date +%d%m%Y%H%M`.log";
-//exec("echo " .$_GET["cc"] ." " .$_GET["telefone"] ." >> requisitar_codigo-".$arquivo."");
-//$result = str_replace("\"", "",$result);
-
 $fp = fopen("./requestcod.log", "r");
 $resultado = "";
 while (!feof($fp)){
-	$resultado = fgets($fp);
+$resultado .= fgets($fp);
 }
 fclose($fp);
+$resultado = explode('"',$resultado);
+$resultado = "login: ".$resultado[3]."  Status: ".$resultado[7]." Motivo:" .$resultado[11]."";
+
 echo("<script language='JavaScript'>
   var width = 900;
   var height = 200;
 
   var left = 99;
   var top = 99;
-  /*var conteudo = \"Ola. Dario\";*/
-  var conteudo = ".$resultado.";
   janela = window.open('requestcod.log','status', 'width='+width+', height='+height+', scrollbars=yes, status=no, toolbar=no, location=no, directories=no, menubar=no, resizable=no, fullscreen=no');
-  /*Janela.document.write(conteudo);*/
 </script>
 ");
 /*
