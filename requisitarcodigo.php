@@ -1,7 +1,7 @@
 <form method="GET" action="requisitarcodigo.php">
-Código do Pais (Ex.: <b>55</b>):<br>
+Código do Pais (CC) (Ex.: <b>55</b>):<br>
 <input type="text" name="cc"><br><br>
-DDD+Telefone (Ex.:<b>84999552565</b>):<br>
+CC+DDD+Telefone (Ex.:<b>5584999552565</b>):<br>
 <input type="text" name="phone"><br>
 Obs.: Aqui deve ser usar o 9 adicional.<br>
 Você precisa receber um SMS!<br>

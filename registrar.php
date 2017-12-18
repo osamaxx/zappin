@@ -1,7 +1,7 @@
 <form method="GET" action="registrar.php">
 Código Pais(Ex.:<b>55</b>):<br>
 <input type="text" name="cc"><br><br>
-DDD+Telefone(Ex.:<b>8499552565</b>):<br>
+CC+DDD+Telefone(Ex.:<b>8499552565</b>):<br>
 <b>Aqui não se usa o 9 adicional.</b></br>
 <input type="text" name="phone"><br><br>
 Codigo (digitar somente os números. Ex.: <b>243568</b>):<br>

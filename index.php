@@ -7,7 +7,8 @@
 
 <?php
 if (isset($_GET["requisitarcodigo"])){
-    $result=shell_exec("sudo yowsup-cli registration -E android --requestcode voice --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ."");
+    
+    $result = shell_exec("sudo yowsup-cli registration -E android --requestcode sms --cc ".$_GET["cc"]." --phone ".$_GET["tel"]." ");
     $resultado = shell_exec("sudo tail -n1 /var/log/apache2/error.log");
     
     $resultado = str_replace("\"", " ",$resultado);
@@ -25,7 +26,7 @@ if (isset($_GET["requisitarcodigo"])){
 
 <?php
 if (isset($_GET["registrar"])){
-    $result=shell_exec("sudo yowsup-cli registration -E android --phone " .$_GET["telefone"] ." --cc " .$_GET["cc"] ." --register " .$_GET["codigo_whats"] ." | tail -n 10");
+    $result=shell_exec("sudo yowsup-cli registration -E android  --register ".$_GET["codigo"]." --phone ".$_GET["telefone"]." --cc ".$_GET["cc"]." ");
     $resultado = shell_exec("sudo tail -n1 /var/log/apache2/error.log");
     $resultado = str_replace("\"", " ",$resultado);
     $remover_car = array("{","}","\\n");
@@ -42,25 +43,17 @@ if (isset($_GET["registrar"])){
 
 <?php
 if (isset($_GET["enviar_msg"])){
-// Definição de variáveis.
 $usuario=($_REQUEST["id"]);
 $senha=($_REQUEST["pw"]);
 $to=($_REQUEST["to"]);
 $msg=($_REQUEST["msg"]);
 
-// Tratamento da mensagem para evitar erros no envio.
-//$mensagem=(tratarmsg($msg));
 $mensagem=$msg;
-//$mensagem=iconv("UTF-8" , "ASCII//TRANSLIT//IGNORE" , $mensagem);
 $mensagem=(trim($mensagem));
 $mensagem=(ucfirst($mensagem));
 
-// Tratamento do destino: remoção do número 9 adicional.
-//$destino=(substr($to,0,4)).(substr($to,5,8));
-
-// Envio da mensagem pelo whatsapp.
 $result = shell_exec("sudo yowsup-cli demos -l $usuario:$senha --send $to \"$mensagem\"");
-sleep(rand(1,3));
+sleep(rand(1,10));
 }
 ?>
 
@@ -112,21 +105,21 @@ sleep(rand(1,3));
 								<div class="inner">
 									<h2>Requisitar código de verificação</h2>
 									<p style="text-align: justify;"> 1º Ligar celular com chip GSM que você deseja ativar o Whats.<br>
-									2º Preencher código do país (Ex.: <b>55</b>) e o nº do telefone (Ex.<b> 5584999552565</b>). <b>Somente nesse passo utilize o 9 adicional.</b><br>
+									2º Preencher código do país (Ex.: <b>55</b>) e o nº do telefone (Ex.<b> 5584999552565</b>).
 									3º Click em <b>Requisitar código</b>. Aguarde um minuto para efetuar nova tentativa caso SMS não seja entregue. Diante de negativas de entrega, considere o chip bloqueado ou algum tipo de problema/configuração no celular/operadora.<br>
 								<section>
-									<form method="get" action="index.php" onsubmit="abrir()">
+									<form method="get" action="index.php">
 										<div class="field">
 											<ul class="row">
 												<label for="name">Código do país. Ex.: <b>55</b></label>
-												<input type="text" name="cc" id="cc" value="55" />
+												<input type="text" name="cc" value="55" />
 												<label for="telefone">Número do telefone: Ex.: <b>5584988547430</b></label>
-												<input type="text" name="telefone" id="telefone" />
+												<input type="text" name="tel" />
 											</ul>
 										</div>
 										<div class="field full">
 											<ul class="actions">
-												<li><input type="submit" value="Requisitar código" class="field first special" name="requisitarcodigo"/></li>
+												<li><input type="submit" value="Requisitar" class="field first special" name="requisitarcodigo"/></li>
 												<li><input type="reset" value="Limpar" class="field last special"/></li>
 											</ul>
 										</div>	
@@ -142,22 +135,22 @@ sleep(rand(1,3));
 					<section id="two" class="wrapper style2 spotlights">
 						<div class="inner">
 							<h2>Ativando Whatsapp no chip GSM</h2>
-							<p style="text-align: justify;">De posse do código, preencher formulário. Atenção: <b>Dessa vez não adicionar o número 9 ao celular.</b><br>Ex. Código do país = <b>55</b> Telefone: <b> 558488547430</b> Código Whatsapp = <b>624857</b>.</p>
+							<p style="text-align: justify;">De posse do código, preencher formulário.<br>Ex. Código do país = <b>55</b> Telefone: <b> 5584988547430</b> Código Whatsapp = <b>684758</b>.</p>
 						<section>
 							<form method="get" action="index.php">
 								<div class="field">
 									<ul class="row">
 										<label for="name">Código do país. Ex.: <b>55</b></label>
-										<input type="text" name="cc" id="cc" value="55" />
-										<label for="telefone">Número do telefone: Ex.: <b>558488547430</b></label>
-										<input type="text" name="telefone" id="telefone" />
+										<input type="text" name="cc" value="55"/>
+										<label for="telefone">Número do telefone: Ex.: <b>5584988547430</b></label>
+										<input type="text" name="telefone"/>
 										<label for="telefone">Código: Ex.:<b>684758</b></label>
-										<input type="text" name="codigo_whats" id="codigo_whats" />
+										<input type="text" name="codigo"/>
 									</ul>
 								</div>
 								<div class="field full">
 									<ul class="actions">
-										<li><input type="submit" value="Registrar" class="field first special" name="registrar" id="registrar"/></li>
+										<li><input type="submit" value="Registrar" class="field first special" name="registrar"/></li>
 										<li><input type="reset" value="Limpar" class="field last special"/></li>
 									</ul>
 								</div>	
@@ -186,7 +179,7 @@ sleep(rand(1,3));
 											<textarea name="msg" id="msg" rows="3" /></textarea>
 										</div>
 										<div class="field full">
-											<label for="to">Destino (Ex. 558488547430)</label>
+											<label for="to">Destino (Ex. 558488547430) (Obs.: Não usar 9 adicional)</label>
 											<input type="text" name="to" id="to" />
 										</div>
 										<div class="field full">
